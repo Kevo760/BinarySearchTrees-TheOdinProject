@@ -18,11 +18,8 @@ newTree.insert(86)
 newTree.insert(84)
 newTree.insert(81)
 newTree.prettyPrint()
-newTree.find(99)
-newTree.find(70)
-newTree.find(83)
-newTree.find(1)
-newTree.find(76)
+console.log(newTree.minHeight())
+
 
 
   return (

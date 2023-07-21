@@ -77,7 +77,7 @@ export const Tree = () => {
     const insertRecursion = (rootNode, data) => {
       // If root data is null set root to data
       if(rootNode === null) {
-        rootNode= Nodes(data)
+        rootNode = Nodes(data)
         return rootNode
       }
       // If data is less than root data pass insertRecursion on root left
@@ -135,26 +135,150 @@ export const Tree = () => {
     }
 
     const find = (value) => {
+    // Pass root value on currentNode
     let currentNode = root
-
+    // While currentNode is not null
     while(currentNode !== null) {
+      // If currentNode data is higher than value, set currentNode to currentNode.left
       if(currentNode.data > value) {
         currentNode = currentNode.left
+        // If currentNode data is less than value, set currentNode to currentNode.right
       } else if(currentNode.data < value) {
         currentNode = currentNode.right
+        // If currentNode data matches value console.log currentNode
       } else if(currentNode.data === value) {
         return console.log(currentNode)
       }
     }
-
+    // If currentNode is null, Node does not exist
     if(currentNode === null) {
       return console.log('Node does not exist')
     } 
   }
 
-    const returnLog = () => {
-      console.log(root)
+  const minHeight = (node = root) => {
+    // If node is null return -1
+    if(node === null) return -1
+  
+    // Go through the left and right side of the node
+    let leftSide = minHeight(node.left)
+    let rightSide = minHeight(node.right)
+    // If rightSide is greater return rightSide value + 1 else return leftSide + 1
+    if(leftSide < rightSide) {
+      return leftSide + 1
+    } else {
+      return rightSide + 1
     }
+  }
+
+  const maxHeight = (node = root) => {
+    // if node is null return -1
+    if(node === null) return -1
+    // Pass through both right and left maxHeight
+    let leftSide = maxHeight(node.left)
+    let rightSide = maxHeight(node.right)
+    // If leftSide is greater than right return leftSide else return rightSide
+    if(leftSide > rightSide) {
+      return leftSide + 1
+    } else {
+      return rightSide + 1
+    }
+  }
+
+  // return true if minHeight and maxHeight are 1 height difference
+  const isBalanced = () => {
+    return minHeight >= maxHeight -1
+  }
+
+  // Gets the most left most node then right
+  const inOrder = () => {
+    if(root === null) {
+      return null
+    } else {
+      let newArr = []
+
+      const inOrderNodes = (node) => {
+        node.left && inOrderNodes(node.left)
+        newArr.push(node.data)
+        node.right && inOrderNodes(node.right)
+      }
+
+      inOrderNodes(root)
+      return newArr
+    }
+
+  }
+
+  // Gets the roots nodes first
+  const preOrder = () => {
+    if(root === null) {
+      return null
+    } else {
+      let newArr = []
+
+      const preOrderNodes = (node) => {
+        preOrderNodes.push(node.data)
+        node.left && preOrderNodes(node.left)
+        node.right && preOrderNodes(node.right)
+      }
+      preOrderNodes(root)
+      return newArr
+    }
+  }
+
+  // Gets the leaf nodes first to the left side of the tree then left nodes to the right
+  const postOrder = () => {
+    if(root === null) {
+      return null
+    } else {
+      let newArr = []
+
+      const postOrderNodes = (node) => {
+        node.left && postOrderNodes(node.left)
+        node.right && postOrderNodes(node.right)
+        newArr.push(node.data)
+      }
+      postOrderNodes(root)
+      return newArr
+    }
+  }
+  // Gets the nodes by level 
+  const levelOrder = () => {
+    let newArr = []
+    let queue = []
+
+    if(root != null) {
+      queue.push(root)
+      while(queue.length > 0) {
+        let node = queue.shift()
+        newArr.push(node.data)
+        if(node.left != null) {
+          queue.push(node.left)
+        }
+        if(node.right != null) {
+          queue.push(node.right)
+        }
+      }
+      return newArr
+    } else {
+      return null
+    }
+  }
+
+  const findDepth = (node = root, value) => {
+      if(root === null) return -1
+
+      let distance = -1
+
+      if((root.data === value) ||
+
+      (distance = findDepth(root.left, value)) >= 0 ||
+
+      (distance = findDepth(root.right, value)) >= 0)
+      return distance + 1
+
+    return distance
+  }
 
     return{
       buildTree,
@@ -162,6 +286,8 @@ export const Tree = () => {
       insert,
       deleteNode,
       find,
-      returnLog
+      minHeight,
+      maxHeight,
+      isBalanced,
     }
   }
