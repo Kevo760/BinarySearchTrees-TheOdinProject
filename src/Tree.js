@@ -147,7 +147,7 @@ export const Tree = () => {
         currentNode = currentNode.right
         // If currentNode data matches value console.log currentNode
       } else if(currentNode.data === value) {
-        return console.log(currentNode)
+        return currentNode
       }
     }
     // If currentNode is null, Node does not exist
@@ -187,7 +187,7 @@ export const Tree = () => {
 
   // return true if minHeight and maxHeight are 1 height difference
   const isBalanced = () => {
-    return minHeight >= maxHeight -1
+    return minHeight() === maxHeight() - 1
   }
 
   // Gets the most left most node then right
@@ -209,7 +209,7 @@ export const Tree = () => {
 
   }
 
-  // Gets the roots nodes first
+  // Gets the roots nodes first then to the left node
   const preOrder = () => {
     if(root === null) {
       return null
@@ -217,7 +217,7 @@ export const Tree = () => {
       let newArr = []
 
       const preOrderNodes = (node) => {
-        preOrderNodes.push(node.data)
+        newArr.push(node.data)
         node.left && preOrderNodes(node.left)
         node.right && preOrderNodes(node.right)
       }
@@ -264,20 +264,31 @@ export const Tree = () => {
       return null
     }
   }
-
-  const findDepth = (node = root, value) => {
-      if(root === null) return -1
+  // Finds the depth of the selected node
+  const findDepth = (value, node = root) => {
+      if(node === null) return -1
 
       let distance = -1
 
-      if((root.data === value) ||
+      if((node.data === value) ||
 
-      (distance = findDepth(root.left, value)) >= 0 ||
+      (distance = findDepth(value, node.left)) >= 0 ||
 
-      (distance = findDepth(root.right, value)) >= 0)
+      (distance = findDepth(value, node.right)) >= 0)
       return distance + 1
 
     return distance
+  }
+
+  const rebalance = () => {
+    // Sets isTreeBalanced with true or false
+    const isTreeBalanced = isBalanced()
+    // If tree is not balanced, get all node values inside an array
+    // and pass the array to buildTree to create a balanced search tree
+    if(isTreeBalanced === false) {
+      const newArr = preOrder()
+      return buildTree(newArr)
+    } else return
   }
 
     return{
@@ -289,5 +300,11 @@ export const Tree = () => {
       minHeight,
       maxHeight,
       isBalanced,
+      inOrder,
+      preOrder,
+      postOrder,
+      levelOrder,
+      findDepth,
+      rebalance
     }
   }
